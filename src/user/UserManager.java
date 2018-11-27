@@ -84,7 +84,7 @@ public class UserManager {
 					 if (this.data[i] instanceof NormalUser) {
 						NormalUser n = (NormalUser) this.data[i];
 						
-						if (n.getAginest() == 0) { //账户被锁定
+						if (n.getStatus() == 2) { //账户被锁定
 							DataWrap wrap = new DataWrap(LOCKED_USER,null);
 							return wrap;
 						}
@@ -123,7 +123,7 @@ public class UserManager {
 				NormalUser n = (NormalUser) this.data[i];
 				int left = n.getAginest();
 				if (left <= 1) {
-					n.setAginest(0);
+					n.setStatus(2);
 					return false; //账户被锁定
 				} else {
 					n.setAginest(left - 1);
