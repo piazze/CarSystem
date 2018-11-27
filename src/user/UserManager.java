@@ -10,7 +10,27 @@ import java.util.Arrays;
 public class UserManager {
 	
 	//剩余尝试机会
-	private final int AGINEST = 3;
+	private final int AGINEST = 0x0003;
+	
+	/**
+	 * 登录成功
+	 */
+	private final int SUCCESS = 1;
+	
+	/**
+	 * 用户名或密码错误
+	 */
+	private final int FAULT = 2;
+	
+	/**
+	 * 用户不存在
+	 */
+	private final int NONE_USER = 3;
+	
+	/**
+	 * 账户被锁定
+	 */
+	private final int LOCKED_USER = 4;
 	
 	public UserManager() {
 		super();
@@ -60,29 +80,26 @@ public class UserManager {
 		for (int i = 0; i < this.size; i++) {
 			if (this.data[i].getUserName().equals(userName)) {//用户名密码正确
 				if (this.data[i].getUserPwd().equals(userPwd)) {
-					 int code = 1;
-					 
 					 //重置登录剩余次数
 					 if (this.data[i] instanceof NormalUser) {
 						NormalUser n = (NormalUser) this.data[i];
 						
 						if (n.getAginest() == 0) { //账户被锁定
-							code = 4;
-							DataWrap wrap = new DataWrap(code,null);
+							DataWrap wrap = new DataWrap(LOCKED_USER,null);
 							return wrap;
 						}
 						n.setAginest(AGINEST);
 					}
 					 
-					 DataWrap wrap = new DataWrap(code,this.data[i]);
+					 DataWrap wrap = new DataWrap(SUCCESS,this.data[i]);
 					 return wrap;
 				}else {
-					int code = 2; //密码错误
+					int code = FAULT; //密码错误
 					//如果登录的账户是普通用户,输入密码错误次数累加1
 					 if (this.data[i] instanceof NormalUser) { //判断登录的用户是否为普通用户
 						 boolean result = this.counter(this.data[i]);
 						 if (!result) {
-							code = 4; //账户被锁定
+							code = LOCKED_USER; //账户被锁定
 						 }
 					 }
 					
@@ -91,8 +108,7 @@ public class UserManager {
 				}
 			}
 		}
-		int code = 3; //不存在的用户
-		DataWrap wrap = new DataWrap(code,null);
+		DataWrap wrap = new DataWrap(NONE_USER,null);//不存在的用户
 		return wrap;
 	}
 	
