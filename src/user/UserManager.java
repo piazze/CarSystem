@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class UserManager {
 	
 	//剩余尝试机会
-	private final int AGINEST = 0x0003;
+	private final int AGINEST = 3;
 	
 	/**
 	 * 登录成功
